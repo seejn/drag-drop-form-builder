@@ -3,6 +3,8 @@ import { v4 as uuidv4 } from "uuid";
 
 import InputCollection from "./InputCollection.jsx";
 import RadioCheckboxCollection from "./RadioCheckboxCollection.jsx";
+import SelectCollection from "./SelectCollection.jsx";
+
 
 import { DroppedFieldContext } from "../../context/DroppedFieldContext.jsx";
 
@@ -13,7 +15,7 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 
 const DragContainer = () => {
-    const { inputFields, radioCheckboxFields } =
+    const { inputFields, radioCheckboxFields, textAreaField, selectField } =
         useContext(DroppedFieldContext);
 
     const [category, setCategory] = useState("input");
@@ -21,7 +23,7 @@ const DragContainer = () => {
     const collections = {
         input: {
             label: "Input",
-            field: <InputCollection inputFields={inputFields} />,
+            field: <InputCollection inputFields={inputFields} textAreaField={textAreaField} />,
         },
         radioCheckbox: {
             label: "Radio / Checkbox",
@@ -29,11 +31,15 @@ const DragContainer = () => {
                 radioCheckboxFields={radioCheckboxFields}
             />
         },
+        select: {
+            label: "Select",
+            field: <SelectCollection selectField={selectField} />
+        }
     };
 
     const collectionName = Object.keys(collections);
-    const tabs = collectionName.map(cname => <Tab label={collections[cname]["label"]} value={cname} />)
-    const tabPanel = collectionName.map(cname => <TabPanel value={cname}>{collections[cname]["field"]}</TabPanel>)
+    const tabs = collectionName.map(cname => <Tab key={uuidv4()} label={collections[cname]["label"]} value={cname} />)
+    const tabPanel = collectionName.map(cname => <TabPanel key={uuidv4()} value={cname}>{collections[cname]["field"]}</TabPanel>)
 
     const handleChange = (event, newValue) => {
         setCategory(newValue);
