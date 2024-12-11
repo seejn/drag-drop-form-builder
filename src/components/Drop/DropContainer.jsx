@@ -5,22 +5,27 @@ import Button from "@mui/material/Button";
 import { DroppedFieldContext } from "../../context/DroppedFieldContext.jsx";
 
 const DropContainer = () => {
-    const { droppedFields, setDroppedFieldState, inputFields, radioCheckboxFields } =
+    const { droppedFields, setDroppedFieldState, inputFields, radioCheckboxFields, textAreaField, selectField } =
         useContext(DroppedFieldContext);
 
     const [{ isOver }, drop] = useDrop(() => ({
         accept: "input",
-        drop: (item) => addToDroppedFields(item.id),
+        drop: (item) => addToDroppedFields(item.id, item.type),
         collect: (monitor) => ({
             isOver: monitor.isOver(),
         }),
     }));
 
-    const addToDroppedFields = (id) => {
-        let toAddField = inputFields.filter((field) => field.id === id);
-        if (toAddField.length === 0) {
-            toAddField = radioCheckboxFields.filter((field) => field.id === id);
+    const addToDroppedFields = (id, type) => {
+        const MAP_TYPE_FIELD = {
+            input: inputFields,
+            radioCheckbox: radioCheckboxFields,
+            textArea: [textAreaField],
+            select: [selectField]
         }
+
+        let toAddField = MAP_TYPE_FIELD[type].filter((field) => field.id === id);
+
         setDroppedFieldState((droppedFieldState) => {
             const newState = [...droppedFieldState, ...toAddField];
             localStorage.setItem("droppedFields", JSON.stringify(newState));
