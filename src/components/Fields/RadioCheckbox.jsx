@@ -17,7 +17,7 @@ const RadioCheckbox = ({ id, type, labelName, items }) => {
 
     const [{ isDragging }, drag] = useDrag(() => ({
         type: "input",
-        item: { id: id },
+        item: { id: id, type: "radioCheckbox" },
         collect: (monitor) => ({
             isDragging: monitor.isDragging(),
         }),

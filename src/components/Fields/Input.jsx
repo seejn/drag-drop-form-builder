@@ -15,7 +15,7 @@ const Input = ({
 }) => {
     const [{ isDragging }, drag] = useDrag(() => ({
         type: "input",
-        item: { id: id },
+        item: { id: id, type: "input" },
         collect: (monitor) => ({
             isDragging: monitor.isDragging(),
         }),
